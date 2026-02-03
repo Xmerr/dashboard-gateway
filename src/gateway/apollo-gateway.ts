@@ -1,11 +1,15 @@
+import { createServer as createHttpServer } from "node:http";
 import { ApolloGateway, IntrospectAndCompose } from "@apollo/gateway";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import type { ILogger } from "@xmer/consumer-shared";
 import { type Client, createClient } from "graphql-ws";
-import { createServer as createHttpServer } from "node:http";
 import { WebSocket, WebSocketServer } from "ws";
-import type { GatewayInstance, GatewayOptions, SubgraphConfig } from "../types/index.js";
+import type {
+	GatewayInstance,
+	GatewayOptions,
+	SubgraphConfig,
+} from "../types/index.js";
 
 // Derive WebSocket URL from HTTP URL if not explicitly provided
 function getWsUrl(subgraph: SubgraphConfig): string | null {
@@ -92,25 +96,31 @@ export function createGateway(options: GatewayOptions): GatewayInstance {
 							{ query: payload.query, variables: payload.variables },
 							{
 								next: (result) => {
-									clientWs.send(JSON.stringify({
-										id,
-										type: "next",
-										payload: result,
-									}));
+									clientWs.send(
+										JSON.stringify({
+											id,
+											type: "next",
+											payload: result,
+										}),
+									);
 								},
 								error: (err) => {
 									const errors = Array.isArray(err) ? err : [err];
-									clientWs.send(JSON.stringify({
-										id,
-										type: "error",
-										payload: errors,
-									}));
+									clientWs.send(
+										JSON.stringify({
+											id,
+											type: "error",
+											payload: errors,
+										}),
+									);
 								},
 								complete: () => {
-									clientWs.send(JSON.stringify({
-										id,
-										type: "complete",
-									}));
+									clientWs.send(
+										JSON.stringify({
+											id,
+											type: "complete",
+										}),
+									);
 								},
 							},
 						);

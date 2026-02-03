@@ -1,5 +1,5 @@
-import { ConfigurationError } from "@xmer/consumer-shared";
 import { beforeEach, describe, expect, it } from "bun:test";
+import { ConfigurationError } from "@xmer/consumer-shared";
 import { createConfig } from "./config.js";
 
 describe("createConfig", () => {
@@ -90,7 +90,11 @@ describe("createConfig", () => {
 				...baseEnv,
 				SUBGRAPHS: JSON.stringify([
 					{ name: "service-a", url: "http://localhost:4001/graphql" },
-					{ name: "service-b", url: "http://localhost:4002/graphql", wsUrl: "ws://localhost:4003/graphql" },
+					{
+						name: "service-b",
+						url: "http://localhost:4002/graphql",
+						wsUrl: "ws://localhost:4003/graphql",
+					},
 				]),
 			};
 
@@ -109,7 +113,11 @@ describe("createConfig", () => {
 			const env = {
 				...baseEnv,
 				SUBGRAPHS: JSON.stringify([
-					{ name: "test", url: "http://localhost:4002/graphql", wsUrl: "ws://localhost:4003/graphql" },
+					{
+						name: "test",
+						url: "http://localhost:4002/graphql",
+						wsUrl: "ws://localhost:4003/graphql",
+					},
 				]),
 			};
 

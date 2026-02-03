@@ -43,7 +43,9 @@ function parseSubgraphs(value: string | undefined): SubgraphConfig[] {
 
 		return parsed.map((sg, index) => {
 			if (!sg.name || typeof sg.name !== "string") {
-				throw new Error(`Subgraph at index ${index} missing required "name" field`);
+				throw new Error(
+					`Subgraph at index ${index} missing required "name" field`,
+				);
 			}
 			if (!sg.url || typeof sg.url !== "string") {
 				throw new Error(`Subgraph "${sg.name}" missing required "url" field`);
