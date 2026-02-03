@@ -4,7 +4,7 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import type { ILogger } from "@xmer/consumer-shared";
 import { type Client, createClient } from "graphql-ws";
 import { createServer as createHttpServer } from "node:http";
-import { WebSocketServer, type WebSocket } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import type { GatewayInstance, GatewayOptions, SubgraphConfig } from "../types/index.js";
 
 // Derive WebSocket URL from HTTP URL if not explicitly provided
