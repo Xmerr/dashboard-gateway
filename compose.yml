@@ -1,0 +1,35 @@
+services:
+  dashboard-gateway:
+    image: ${DOCKERHUB_USERNAME:-xmer}/dashboard-gateway:latest
+    container_name: dashboard-gateway
+    restart: unless-stopped
+    environment:
+      - PORT=${PORT:-4000}
+      - SUBGRAPHS=[{"name":"docker-health-monitor","url":"http://docker-health-monitor:4002/graphql","wsUrl":"ws://docker-health-monitor:4003/graphql"}]
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - LOKI_HOST=${LOKI_HOST:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    ports:
+      - "${PORT:-4000}:4000"
+      - "${WS_PORT:-4001}:4001"
+    depends_on:
+      - docker-health-monitor
+    networks:
+      - network
+
+  docker-health-monitor:
+    image: ${DOCKERHUB_USERNAME:-xmer}/docker-health-monitor:latest
+    container_name: docker-health-monitor
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - GRAPHQL_PORT=4002
+      - GRAPHQL_WS_PORT=4003
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - network
+
+networks:
+  network:
+    external: true

@@ -1,0 +1,30 @@
+{
+	"name": "dashboard-gateway",
+	"version": "1.0.0",
+	"type": "module",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"lint": "biome check src/",
+		"lint:fix": "biome check --write src/",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage",
+		"start": "bun run src/index.ts"
+	},
+	"dependencies": {
+		"@apollo/gateway": "^2.9.0",
+		"@apollo/server": "^4.11.0",
+		"@xmer/consumer-shared": "^1.0.1",
+		"graphql": "^16.9.0",
+		"graphql-subscriptions": "^2.0.0",
+		"graphql-ws": "^5.16.0",
+		"ws": "^8.18.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/amqplib": "^0.10.8",
+		"@types/bun": "^1.2.4",
+		"@types/ws": "^8.5.0",
+		"typescript": "^5.7.3"
+	}
+}
