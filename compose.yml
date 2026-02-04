@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - PORT=${PORT:-4000}
-      - SUBGRAPHS=[{"name":"docker-health-monitor","url":"http://docker-health-monitor:4002/graphql","wsUrl":"ws://docker-health-monitor:4003/graphql"}]
+      - SUBGRAPHS=[{"name":"docker-health-monitor","url":"http://docker-health-monitor:4002/graphql","wsUrl":"ws://docker-health-monitor:4003/graphql"},{"name":"fitgirl","url":"http://fitgirl-subgraph:4004/graphql","wsUrl":"ws://fitgirl-subgraph:4005/graphql"}]
       - RABBITMQ_URL=${RABBITMQ_URL}
       - LOKI_HOST=${LOKI_HOST:-}
       - LOG_LEVEL=${LOG_LEVEL:-info}
@@ -14,6 +14,7 @@ services:
       - "${WS_PORT:-4001}:4001"
     depends_on:
       - docker-health-monitor
+      - fitgirl-subgraph
     networks:
       - network
 
@@ -29,6 +30,26 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - network
+
+  fitgirl-subgraph:
+    image: ${DOCKERHUB_USERNAME:-xmer}/fitgirl-subgraph:latest
+    container_name: fitgirl-subgraph
+    restart: unless-stopped
+    environment:
+      - DATABASE_PATH=/app/data/fitgirl.db
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - GRAPHQL_PORT=4004
+      - GRAPHQL_WS_PORT=4005
+      - LOKI_HOST=${LOKI_HOST:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - fitgirl-data:/app/data
+    networks:
+      - network
+
+volumes:
+  fitgirl-data:
+    external: true
 
 networks:
   network:

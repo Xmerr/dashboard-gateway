@@ -97,6 +97,15 @@ type Query {
   container(id: ID!): Container
 }
 
+type Mutation {
+  refreshContainers: RefreshResult!
+}
+
+type RefreshResult {
+  success: Boolean!
+  message: String
+}
+
 type Subscription {
   containerStatusChanged: ContainerStatusEvent!
   containerAlert: ContainerAlertEvent!
